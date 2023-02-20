@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Memorize(HW)
+//  Memorize
 //
 //  Created by John Alban on 2/14/23.
 //
