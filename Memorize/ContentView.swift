@@ -11,21 +11,24 @@ struct ContentView: View {
     let viewModel: EmojiMemoryGame
     
     var body: some View {
-        VStack {
-            ScrollView {
-                //controls how many cards display in 1 row
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    //prints out cards for emoji count using array
-                    ForEach(viewModel.cards) { card in
-                        CardView(card: card)
-                            .aspectRatio(2/3,contentMode:.fit)
-                    }
+        ScrollView {
+            //controls how many cards display in 1 row
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                //prints out cards for emoji count using array
+                ForEach(viewModel.cards) { card in
+                    CardView(card: card)
+                        .aspectRatio(2/3,contentMode:.fit)
+                        .onTapGesture {
+                            viewModel.choose(card)
+                        }
+                    
                 }
+                
             }
-            .foregroundColor(.blue)
+            
         }
-        .padding(.horizontal)
         .foregroundColor(.blue)
+        .padding(.horizontal)
     }
 }
 
