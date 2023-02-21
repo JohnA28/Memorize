@@ -7,22 +7,36 @@
 
 import Foundation
 
-struct MemoryGame<CardContent> {
+struct MemoryGame<CardContent> where CardContent: Equatable{
     private(set) var cards: Array<Card>
     
+    private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    
     mutating func choose (_ card: Card){
-        let chosenIndex = index(of:card)
-        cards[chosenIndex].isFaceUp.toggle()
+        //will allow to only choose cards that aren't face up already or matched
+        if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}),
+           !cards[chosenIndex].isFaceUp,
+           !cards[chosenIndex].isMatched
+        {
+            //logic for matching cards if they have the same content
+            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard {
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                    cards[chosenIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+                indexOfTheOneAndOnlyFaceUpCard = nil
+            } else {
+                //will make all cards face down when selecting new pair to match
+                for index in 0..<cards.count {
+                    cards[index].isFaceUp = false
+                }
+                //will make the new selected card face up
+                indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+            }
+            cards[chosenIndex].isFaceUp.toggle()
+            }
     }
     
-    func index(of card: Card) -> Int {
-        for index in 0..<cards.count {
-            if cards[index].id == card.id {
-            return index
-            }
-        }
-        return 0 // need to fix later
-    }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent) {
         cards = Array<Card>() // creates empty array of cards
