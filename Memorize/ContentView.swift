@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    let viewModel: EmojiMemoryGame
+    
+    //ObservedObject allows the UI to rebuild when viewmodel changes
+   @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
         ScrollView {
